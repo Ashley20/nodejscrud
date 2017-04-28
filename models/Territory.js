@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 
 
@@ -21,16 +23,17 @@ module.exports.getTerritories = function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addTerritory = function(Territory, callback){
+module.exports.addTerritory = function(data, callback){
+	var Territory = new this(data);
 	Territory.save(callback);
 }
 
 /*                PUT               */
-module.exports.updateTerritory = function(id, newTerritory, options, callback){
+module.exports.updateTerritory = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		TerritoryDescription : newTerritory.TerritoryDescription,
-		region_ids : newTerritory.region_ids
+		TerritoryDescription : data.TerritoryDescription,
+		region_ids           : data.region_ids
 	}
 
 	Territory.findOneAndUpdate(query, update, options, callback);

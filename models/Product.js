@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -20,20 +22,21 @@ module.exports.getProducts = function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addProduct = function(Product, callback){
+module.exports.addProduct = function(data, callback){
+	var Product = new this(data);
 	Product.save(callback);
 }
 
-module.exports.updateProduct = function(id, newProduct, options, callback){
+module.exports.updateProduct = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		ProductName : newProduct.ProductName,
-		SupplierId : newProduct.SupplierId,
-		CategoryId : newProduct.CategoryId,
-		QuantityPerUnit : newProduct.QuantityPerUnit,
-		UnitPrice : newProduct.UnitPrice,
-		UnitsInStock : newProduct.UnitsInStock,
-		UnitsOnOrder : newProduct.UnitsOnOrder
+		ProductName     : data.ProductName,
+		SupplierId      : data.SupplierId,
+		CategoryId      : data.CategoryId,
+		QuantityPerUnit : data.QuantityPerUnit,
+		UnitPrice       : data.UnitPrice,
+		UnitsInStock    : data.UnitsInStock,
+		UnitsOnOrder    : data.UnitsOnOrder
 	}
 
 	Product.findOneAndUpdate(query, update, options, callback);

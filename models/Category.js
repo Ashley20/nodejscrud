@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -22,23 +24,22 @@ module.exports.getCategoryById = function(id, callback){
 
 
 /*                POST               */
-module.exports.addCategory = function(Category, callback){
+module.exports.addCategory = function(data, callback){
+	var Category = new this(data);
 	Category.save(callback);
+
 }
 
 
 /*                PUT               */
 
-module.exports.updateCategory = function(id, newCategory, options, callback){
+module.exports.updateCategory = function(id, data, options, callback){
 	var query = { _id : id };
-
-	var update = {
-		CategoryName: newCategory.CategoryName,
-		Description : newCategory.Description,
-		Picture : newCategory.Picture
-
-	}
-
+    var update = {
+    	CategoryName : data.CategoryName,
+    	Description : data.Description,
+    	Picture : data.Picture
+    }
 	 Category.findOneAndUpdate(query, update, options, callback);
 
 }
@@ -48,3 +49,4 @@ module.exports.removeCategory = function(id, callback){
 	var query = { _id : id };
 	Category.remove(query, callback);
 }
+

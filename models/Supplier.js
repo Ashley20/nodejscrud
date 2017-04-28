@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -20,21 +22,22 @@ module.exports.getSuppliers = function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addSupplier = function(Supplier, callback){
+module.exports.addSupplier = function(data, callback){
+	var Supplier = new this(data);
 	Supplier.save(callback);
 
 }
 
 /*                PUT               */
-module.exports.updateSupplier = function(id, newSupplier, options, callback){
+module.exports.updateSupplier = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		CompanyName : newSupplier.CompanyName,
-		ContactName : newSupplier.ContactName,
-		Phone : newSupplier.Phone,
-		Adress : newSupplier.Adress,
-		HomePage : newSupplier.HomePage,
-		PostalCode : newSupplier.PostalCode
+		CompanyName : data.CompanyName,
+		ContactName : data.ContactName,
+		Phone       : data.Phone,
+		Adress      : data.Adress,
+		HomePage    : data.HomePage,
+		PostalCode  : data.PostalCode
 	}
 
 	Supplier.findOneAndUpdate(query, update, options, callback);

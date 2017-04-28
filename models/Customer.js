@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -17,19 +19,20 @@ var Customer = module.exports = mongoose.model('Customer', customerSchema);
 }
 
 /*                POST               */
- module.exports.addCustomer =  function(Customer, callback){
+ module.exports.addCustomer =  function(data, callback){
+ 	var Customer = new this(data);
 	Customer.save(callback);
 }
 
 /*                PUT               */
-module.exports.updateCustomer = function(id, newCustomer, options, callback){
+module.exports.updateCustomer = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		companyName : newCustomer.companyName,
-		contactName : newCustomer.contactName,
-		Phone : newCustomer.Phone,
-		Adress : newCustomer.Adress,
-		Region : newCustomer.Region
+		companyName : data.companyName,
+		contactName : data.contactName,
+		Phone       : data.Phone,
+		Adress      : data.Adress,
+		Region      : data.Region
 	}
 
 	Customer.findOneAndUpdate(query, update, options, callback);

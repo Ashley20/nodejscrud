@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -18,22 +20,23 @@ module.exports.getOrders =  function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addOrder = function(Order, callback){
+module.exports.addOrder = function(data, callback){
+	var Order = new this(data);
 	Order.save(callback);
 }
 
 /*                PUT               */
 
-module.exports.updateOrder = function(id, newOrder, options, callback){
+module.exports.updateOrder = function(id, data, options, callback){
 	var query = { _id : id };
 
 	var update = {
-		CustomerId: newOrder.CustomerId,
-		EmployeeId : newOrder.EmployeeId,
-		OrderDate : newOrder.OrderDate,
-		ShippedDate : newOrder.ShippedDate,
-		ShipCountry : newOrder.ShipCountry,
-		ShipperId : newOrder.ShipperId
+		CustomerId  : data.CustomerId,
+		EmployeeId  : data.EmployeeId,
+		OrderDate   : data.OrderDate,
+		ShippedDate : data.ShippedDate,
+		ShipCountry : data.ShipCountry,
+		ShipperId   : data.ShipperId
 
 	}
 

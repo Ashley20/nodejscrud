@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -15,16 +17,17 @@ module.exports.getShippers = function(callback, limit){
 	Shipper.find(callback).limit(limit);
 }
 /*                POST               */
-module.exports.addShipper = function(Shipper, callback){
+module.exports.addShipper = function(data, callback){
+	var Shipper = new this(data);
 	Shipper.save(callback);
 }
 
 /*                PUT               */
-module.exports.updateShipper = function(id, newShipper, options, callback){
+module.exports.updateShipper = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		CompanyName : newShipper.CompanyName,
-		Phone : newShipper.Phone
+		CompanyName : data.CompanyName,
+		Phone       : data.Phone
 	}
 
 	Shipper.findOneAndUpdate(query, update, options, callback);

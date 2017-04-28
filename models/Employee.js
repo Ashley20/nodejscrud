@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -21,23 +23,24 @@ module.exports.getEmployees = function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addEmployee = function(Employee, callback){
+module.exports.addEmployee = function(data, callback){
+	var Employee = new this(data);
 	Employee.save(callback);
 }
 
 /*                PUT               */
-module.exports.updateEmployee = function(id, newEmployee, options, callback){
+module.exports.updateEmployee = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		firstName : newEmployee.firstName,
-		lastName : newEmployee.lastName,
-		birthDate : newEmployee.birthDate,
-		hireDate : newEmployee.hireDate,
-		Phone : newEmployee.Phone,
-		Adress : newEmployee.Adress,
-		Notes : newEmployee.Notes,
-		ImageUrl : newEmployee.ImageUrl,
-		territoryId :newEmployee.territoryId
+		firstName   : data.firstName,
+		lastName    : data.lastName,
+		birthDate   : data.birthDate,
+		hireDate    : data.hireDate,
+		Phone       : data.Phone,
+		Adress      : data.Adress,
+		Notes       : data.Notes,
+		ImageUrl    : data.ImageUrl,
+		territoryId : data.territoryId
 	}
 
 	Employee.findOneAndUpdate(query, update, options, callback);

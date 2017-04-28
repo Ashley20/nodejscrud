@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose');
 
 // RegionSchema
@@ -15,15 +17,16 @@ module.exports.getRegions = function(callback, limit){
 }
 
 /*                POST               */
-module.exports.addRegion = function(Region, callback){
+module.exports.addRegion = function(data, callback){
+	var Region = new this(data);
 	Region.save(callback);
 }
 
 /*                PUT               */
-module.exports.updateRegion = function(id, newRegion, options, callback){
+module.exports.updateRegion = function(id, data, options, callback){
 	var query = { _id : id };
 	var update = {
-		RegionDescription : newRegion.RegionDescription
+		RegionDescription : data.RegionDescription
 	}
 
 	Region.findOneAndUpdate(query, update, options, callback);
