@@ -1,7 +1,7 @@
 var User = require('../models/User');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
- moment().format('MMMM Do YYYY, h:mm:ss a');
+var session = require('express-session');
 
 exports.authenticate = function(req, res){
 	
@@ -18,6 +18,9 @@ exports.authenticate = function(req, res){
       if (user.password != req.body.password) {
         res.json({ success: false, message: 'Authentication failed. Wrong password.' });
       } else {
+       
+       
+       req.session.user = user;
 
         // if user is found and password is right
         // create a token
@@ -68,5 +71,19 @@ exports.create = function(req, res){
 
 	});
 
+}
+
+
+exports.showLoginForm = function(req, res){
+  res.json(' You are in the login form page now!');
+}
+
+exports.logout = function(req, res){
+  req.session.destroy(function(err) {
+  // cannot access session here
+  if(err) throw err;
+   });
+  res.redirect('/authenticate');
+  res.json('You have successfully logged out.!');
 }
 

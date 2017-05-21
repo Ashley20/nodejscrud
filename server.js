@@ -9,16 +9,19 @@ var router = express.Router();
 var app = express();
 var is = require('is_js');
 var jwt = require('jsonwebtoken');
+var session = require('express-session');
+var CookieParser = require('cookie-parser');
+var User = require('./models/User');
 
 
-
+  app.use(CookieParser());
   app.use(logger('dev'));
-  app.use(router);
   app.set('secret', 'bicirik');
+  app.use(session({resave: true, saveUninitialized: true, secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
 
 
 
-  router.use(express.static(__dirname + "/public"));
+  app.use(express.static(__dirname + "/public/views"));
 
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({
@@ -26,7 +29,7 @@ var jwt = require('jsonwebtoken');
      }));
     
 
- 
+ /*
   router.use(function(req, res, next) {
 
   if(req.path === '/authenticate'){
@@ -61,6 +64,26 @@ var jwt = require('jsonwebtoken');
 
 }
 });
+
+*/
+  // SESSION MIDDLEWARE
+
+  app.use(function(req, res, next) {
+  if (req.session && req.session.user) {
+    User.findOne({ email: req.session.user.email }, function(err, user) {
+      if (user) {
+        req.user = user;
+        delete req.user.password; // delete the password from the session
+        req.session.user = user;  //refresh the session value
+        res.locals.user = user;
+      }
+      // finishing processing the middleware and run the route
+      next();
+    });
+  } else {
+    next();
+  }
+});
  
  
 require('./routes/Category')(router);
@@ -75,6 +98,7 @@ require('./routes/Supplier')(router);
 require('./routes/Territory')(router);
 require('./routes/Authentication')(router);
 require('./routes/File')(router);
+require('./routes/Logout')(router);
 
 
    
@@ -90,10 +114,11 @@ mongoose.connect('mongodb://localhost/northwind', function(err, database){
 });
 
 app.listen(4000);
+app.use(router);
 
 
 
-
+module.exports = app
 
 
 
