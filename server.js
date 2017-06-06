@@ -12,12 +12,16 @@ var jwt = require('jsonwebtoken');
 var session = require('express-session');
 var CookieParser = require('cookie-parser');
 var User = require('./models/User');
+var pmx = require('pmx');
+var payloadValidator = require('payload-validator');
+
+pmx.emit("Event name","event detail,supports JSON too");
 
 
   app.use(CookieParser());
   app.use(logger('dev'));
   app.set('secret', 'bicirik');
-  app.use(session({resave: true, saveUninitialized: true, secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
+  //app.use(session({resave: true, saveUninitialized: true, secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
 
 
 
@@ -27,6 +31,8 @@ var User = require('./models/User');
     router.use(bodyParser.urlencoded({
          extended: true
      }));
+
+
     
 
  /*
@@ -65,7 +71,7 @@ var User = require('./models/User');
 }
 });
 
-*/
+
   // SESSION MIDDLEWARE
 
   app.use(function(req, res, next) {
@@ -84,7 +90,7 @@ var User = require('./models/User');
     next();
   }
 });
- 
+ */
  
 require('./routes/Category')(router);
 require('./routes/Region')(router);
@@ -115,6 +121,15 @@ mongoose.connect('mongodb://localhost/northwind', function(err, database){
 
 app.listen(4000);
 app.use(router);
+
+
+app.use(function(err, req, res, next){
+
+   res.status(err.status || 500);
+   res.send({error: err.message});
+
+
+});
 
 
 

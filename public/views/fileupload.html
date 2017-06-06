@@ -5,12 +5,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
-  <form method="post" enctype="multipart/form-data" action="/upload-file">
+  <form id="uploadForm" method="post" enctype="multipart/form-data" action="/upload-file">
     
-    <input type="file" name="thumbnail">
+    <input type="file" name="thumbnail" multiple>
     <input type="submit">
+  
 </form>
 </body>
 </html>
