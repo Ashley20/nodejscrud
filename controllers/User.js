@@ -2,6 +2,8 @@ var User = require('../models/User');
 var jwt = require('jsonwebtoken');
 var moment = require('moment');
 var session = require('express-session');
+var smtp = require('../smtp/Smtp');
+
 
 var payloadValidator = require('payload-validator');
 var expectedPayload = {
@@ -93,8 +95,8 @@ exports.create = function(req, res, next){
                     return next(err);
                    
                   }
-
-                  res.json(result);
+                     smtp.sendEmail(req.body.email);
+                 // res.json(result);
 
                 });
             } else {
@@ -104,6 +106,30 @@ exports.create = function(req, res, next){
             res.json({"message" : "paylod not correct"});
         }
 	
+
+}
+
+exports.verify = function(req, res, next){
+
+  if((req.protocol+"://"+req.get('host'))==("http://localhost:4000"))
+{
+    console.log("Domain is matched. Information is from Authentic email");
+    console.log(req.query.id + "  " + smtp.Rand);
+    if(req.query.id == smtp.Rand)
+    {
+        console.log("email is verified");
+        res.end("<h1>Your email  has  been Successfully verified");
+    }
+    else
+    {
+        console.log("email is not verified");
+        res.end("<h1>Bad Request</h1>");
+    }
+}
+else
+{
+    res.end("<h1>Request is from unknown source");
+}
 
 }
 
